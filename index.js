@@ -25,7 +25,7 @@ app.get("/", async (req, res) => {
   res.status(200).json("Ready to serve");
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   try {
     const { name, rollno, dept, code } = req.body;
     await db("user_table").insert({
@@ -41,12 +41,11 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
-  const { code } = req.body;
+app.get("/api/profile/:code", async (req, res) => {
   try {
     await db("user_table")
       .select("*")
-      .where("code", code)
+      .where("code", req.params.code)
       .then((user) => res.json(user));
   } catch (e) {
     res.status(400).json("failed");
